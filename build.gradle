@@ -1,0 +1,94 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'checkstyle'
+apply plugin: 'application'
+
+group 'sbi'
+version '1.0-SNAPSHOT'
+project.buildDir = '/target'
+
+mainClassName = "IPL"
+applicationDefaultJvmArgs = ["-Dide=true -Ddebug=true"]
+
+allprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+sourceSets {
+    main {
+        output.resourcesDir = '/target/classes'
+        output.classesDir   = '/target/classes'
+    }
+}
+
+// Workaround for double files in jar when manually setting output dirs
+jar.doFirst {
+    sourceSets.main.output.resourcesDir = "/does/not/exist"
+}
+jar.doLast {
+    sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'IPL'
+    }
+}
+
+checkstyle {
+    ignoreFailures = true
+    // showViolations = false
+}
+
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: "http://url.to/the/repository")
+//        }
+//    }
+//}
+
+configurations {
+    ipl
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases" }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+
+    compile project(':Model')
+    compile 'com.scireum:sirius-kernel:2.0-SNAPSHOT'
+    compile 'com.scireum:sirius-ipl:1.0'
+    ipl 'com.scireum:sirius-ipl:1.0'
+
+//    fileTree(dir: 'lib', include: '**/*.jar')
+}
+
+task extractIPL(type: Copy) {
+    from {
+        configurations.ipl.collect { zipTree(it) }
+    }
+    into file("${buildDir}/ipl")
+}
+
+build.dependsOn { extractIPL }
+
+task listJars << {
+    configurations.compile.each {
+        File file -> println file.name
+    }
+}
+
+// http://toastdroid.com/2014/03/28/customizing-your-build-with-gradle/
+// https://jitpack.io/
+// https://github.com/johnrengelman/shadow
+// http://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
+// http://stackoverflow.com/questions/4871656/using-gradle-to-build-a-jar-with-dependencies
+// http://blog.denevell.org/gradle-hello-world-java-fat-jar.html

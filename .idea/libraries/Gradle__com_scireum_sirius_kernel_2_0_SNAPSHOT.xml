@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.scireum:sirius-kernel:2.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.scireum/sirius-kernel/2.0-SNAPSHOT/73b018815be3b6d53087fa2b0f38e34708052981/sirius-kernel-2.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.scireum/sirius-kernel/2.0-SNAPSHOT/15e35d95cc8b20c8db2e71c69a416efda24bdf9c/sirius-kernel-2.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
