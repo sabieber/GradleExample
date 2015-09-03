@@ -122,14 +122,18 @@ distributions {
             from ("$buildDir/classes") {
                 into "app"
             }
-//            exclude "$buildDir/classes"
+//          exclude "$buildDir/classes"
         }
     }
 }
 
+/**
+ * Some interesting links regarding gradle
+ */
 // http://toastdroid.com/2014/03/28/customizing-your-build-with-gradle/
 // https://jitpack.io/
 // https://github.com/johnrengelman/shadow
 // http://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
 // http://stackoverflow.com/questions/4871656/using-gradle-to-build-a-jar-with-dependencies
 // http://blog.denevell.org/gradle-hello-world-java-fat-jar.html
+// http://fuzzydroid.blogspot.com/2015/09/some-gradle-tricks-for-android.html
