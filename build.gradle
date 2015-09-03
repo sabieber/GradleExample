@@ -3,6 +3,9 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'checkstyle'
 apply plugin: 'application'
+apply plugin: 'distribution'
+
+apply from: file('gradle/docs.gradle')
 
 group 'sbi'
 version '1.0-SNAPSHOT'
@@ -11,10 +14,8 @@ project.buildDir = '/target'
 mainClassName = "IPL"
 applicationDefaultJvmArgs = ["-Dide=true -Ddebug=true"]
 
-allprojects {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+project.sourceCompatibility = 1.8
+project.targetCompatibility = 1.8
 
 sourceSets {
     main {
@@ -23,7 +24,9 @@ sourceSets {
     }
 }
 
-// Workaround for double files in jar when manually setting output dirs
+/**
+ * Workaround for double files in jar when manually setting output dirs
+ */
 jar.doFirst {
     sourceSets.main.output.resourcesDir = "/does/not/exist"
 }
@@ -32,6 +35,7 @@ jar.doLast {
 }
 
 jar {
+    from rootProject.file('NOTICE')
     manifest {
         attributes 'Main-Class': 'IPL'
     }
@@ -71,6 +75,9 @@ dependencies {
 //    fileTree(dir: 'lib', include: '**/*.jar')
 }
 
+/**
+ * Extracting contents of the IPL dependency to the build directory
+ */
 task extractIPL(type: Copy) {
     from {
         configurations.ipl.collect { zipTree(it) }
@@ -78,11 +85,45 @@ task extractIPL(type: Copy) {
     into file("${buildDir}/ipl")
 }
 
-build.dependsOn { extractIPL }
-
+/**
+ * List jar names of all dependencies used
+ */
 task listJars << {
     configurations.compile.each {
         File file -> println file.name
+    }
+}
+
+/**
+ * Specify the gradle wrapper version
+ */
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+
+/**
+ * Copy all runtime dependencies to folder in build dir
+ */
+task copyDependencies(type: Copy) {
+    from configurations.runtime
+    into "$buildDir/output/lib"
+}
+
+/**
+ * Creation of assembly ZIP file with distribution plugin
+ */
+distZip.dependsOn { extractIPL }
+
+distributions {
+    main {
+        baseName = "GradleExample"
+        contents {
+            from "$buildDir/ipl"
+            from ("$buildDir/classes") {
+                into "app"
+            }
+//            exclude "$buildDir/classes"
+        }
     }
 }
 
