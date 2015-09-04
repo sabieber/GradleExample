@@ -9,7 +9,7 @@ apply from: file('gradle/docs.gradle')
 
 group 'sbi'
 version '1.0-SNAPSHOT'
-project.buildDir = '/target'
+project.buildDir = 'target'
 
 mainClassName = "IPL"
 applicationDefaultJvmArgs = ["-Dide=true -Ddebug=true"]
@@ -19,8 +19,8 @@ project.targetCompatibility = 1.8
 
 sourceSets {
     main {
-        output.resourcesDir = '/target/classes'
-        output.classesDir   = '/target/classes'
+        output.resourcesDir = 'target/classes'
+        output.classesDir   = 'target/classes'
     }
 }
 

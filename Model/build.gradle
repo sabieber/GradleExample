@@ -4,12 +4,10 @@ apply plugin: 'maven'
 
 group 'sbi'
 version '1.0-SNAPSHOT'
-project.buildDir = '/target'
+project.buildDir = 'target'
 
-allprojects {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+project.sourceCompatibility = 1.8
+project.targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
